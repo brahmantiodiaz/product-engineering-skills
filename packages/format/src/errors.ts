@@ -10,6 +10,7 @@ export type ErrorCode =
   | "ID_DELETED"
   | "ID_REUSED"
   | "EMPTY_IMPLEMENTS"
+  | "MALFORMED_IMPLEMENTS"
   | "INVALID_DATA_REQ"
   | "DUPLICATE_SCREEN";
 
@@ -32,6 +33,7 @@ const TEMPLATES: Record<ErrorCode, string> = {
   ID_DELETED: "{id} was deleted; mark it **Status:** removed instead",
   ID_REUSED: "{id} was removed and cannot be reused",
   EMPTY_IMPLEMENTS: "**Implements:** lists no REQ IDs",
+  MALFORMED_IMPLEMENTS: "Write the field as **Implements:** (colon inside the bold) so its REQ IDs are read",
   INVALID_DATA_REQ: '"{value}" in data-req is not a REQ ID',
   DUPLICATE_SCREEN: 'Duplicate screen "{name}", first defined on line {firstLine}',
 };

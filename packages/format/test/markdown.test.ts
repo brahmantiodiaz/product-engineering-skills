@@ -13,6 +13,23 @@ describe("scanLines", () => {
     expect(lines.filter((l) => l.inFence).every((l) => l.heading === null)).toBe(true);
   });
 
+  it("closes a fence only with the same character, at least as long, and no info string", () => {
+    const backticks = scanLines(["````md", "```md", "### REQ-001 Example", "```", "````", "### REQ-001 Real"].join("\n"));
+    expect(backticks.map((l) => l.inFence)).toEqual([true, true, true, true, true, false]);
+    expect(backticks[5]!.heading).toEqual({ level: 3, text: "REQ-001 Real" });
+
+    const tildes = scanLines(["~~~~", "~~~", "# inside", "~~~~", "# outside"].join("\n"));
+    expect(tildes.map((l) => l.inFence)).toEqual([true, true, true, true, false]);
+  });
+
+  it("scans a very long heading line in linear time", () => {
+    const text = "a" + " ".repeat(200_000) + "x";
+    const start = performance.now();
+    const [l] = scanLines("# " + text);
+    expect(performance.now() - start).toBeLessThan(500);
+    expect(l!.heading).toEqual({ level: 1, text });
+  });
+
   it("treats CRLF, lone CR, and a leading BOM like LF", () => {
     const lf = scanLines("# A\nx\n## B");
     expect(scanLines("﻿# A\r\nx\r\n## B")).toEqual(lf);

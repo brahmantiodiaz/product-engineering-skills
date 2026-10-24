@@ -1,0 +1,4 @@
+{
+  "sections": [{ "heading": "API", "implements": [] }],
+  "errors": ["line 2: Write the field as **Implements:** (colon inside the bold) so its REQ IDs are read [MALFORMED_IMPLEMENTS]"]
+}

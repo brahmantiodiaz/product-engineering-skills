@@ -19,6 +19,9 @@ export interface SpecIndex {
 }
 
 const IMPLEMENTS = /\*\*Implements:\*\*(.*)$/;
+// A line that starts like an Implements field but is not written exactly,
+// e.g. "**Implements**: REQ-001" or "Implements: REQ-001".
+const IMPLEMENTS_NEAR_MISS = /^\s*(?:[-*]\s+)?\**\s*Implements\s*\**\s*:/;
 const REQ_ID = /REQ-\d{3,}/g;
 
 export function parseSpec(source: string): SpecIndex {
@@ -34,7 +37,12 @@ export function parseSpec(source: string): SpecIndex {
       continue;
     }
     const match = IMPLEMENTS.exec(line.text);
-    if (!match) continue;
+    if (!match) {
+      if (IMPLEMENTS_NEAR_MISS.test(line.text)) {
+        errors.push(createError("MALFORMED_IMPLEMENTS", line.number, {}));
+      }
+      continue;
+    }
 
     const ids = match[1]!.match(REQ_ID) ?? [];
     if (ids.length === 0) {
