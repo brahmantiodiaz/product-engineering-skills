@@ -157,6 +157,8 @@ Specs follow the Superpowers design doc style: architecture, components, data fl
 
 A prototype is one HTML file. Screens are separated by hash routing (`#/screen-name`), and elements representing requirements are marked `data-req="REQ-001"`. One element may represent several requirements (`data-req="REQ-001 REQ-004"`).
 
+Each screen is wrapped in an element with `data-screen="<name>"`, where the name matches its route (`#/<name>`). This lets `@pes/format` tell which `data-req` belongs to which screen, so the platform can highlight stale screens. Screen names are unique within one prototype.
+
 ### 7.4 ID rules
 
 These rules are enforced by `@pes/format`, both in the CLI before a push and on the server on save.
