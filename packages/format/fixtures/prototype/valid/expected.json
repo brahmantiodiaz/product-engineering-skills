@@ -1,0 +1,23 @@
+{
+  "screens": [
+    {
+      "name": "order-list",
+      "line": 3,
+      "reqIds": [
+        "REQ-001"
+      ]
+    },
+    {
+      "name": "order-form",
+      "line": 6,
+      "reqIds": [
+        "REQ-001",
+        "REQ-002"
+      ]
+    }
+  ],
+  "uncovered": [
+    "REQ-003"
+  ],
+  "errors": []
+}

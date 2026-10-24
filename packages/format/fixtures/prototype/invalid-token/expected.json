@@ -1,0 +1,18 @@
+{
+  "screens": [
+    {
+      "name": "home",
+      "line": 1,
+      "reqIds": [
+        "REQ-002"
+      ]
+    }
+  ],
+  "uncovered": [
+    "REQ-001"
+  ],
+  "errors": [
+    "line 2: \"REQ-1\" in data-req is not a REQ ID [INVALID_DATA_REQ]",
+    "line 2: REQ-002 is removed in the PRD [REFERENCE_TO_REMOVED]"
+  ]
+}

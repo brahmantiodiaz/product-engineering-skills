@@ -1,0 +1,10 @@
+{
+  "ids": [
+    "REQ-001",
+    "AC-001",
+    "REQ-002"
+  ],
+  "errors": [
+    "line 7: REQ-002 has unknown status \"diputuskan\"; allowed: proposed, decided, verified, open, conflicted, not-applicable, removed [UNKNOWN_STATUS]"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "diff": {
+    "added": [],
+    "changed": [],
+    "removed": [
+      "REQ-002"
+    ]
+  },
+  "errors": [
+    "document: REQ-002 was deleted; mark it **Status:** removed instead [ID_DELETED]"
+  ]
+}

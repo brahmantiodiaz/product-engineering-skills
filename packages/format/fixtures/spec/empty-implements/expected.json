@@ -1,0 +1,11 @@
+{
+  "sections": [
+    {
+      "heading": "API",
+      "implements": []
+    }
+  ],
+  "errors": [
+    "line 2: **Implements:** lists no REQ IDs [EMPTY_IMPLEMENTS]"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "ids": [
+    "REQ-001"
+  ],
+  "errors": [
+    "line 2: AC-001 is not inside a REQ block [AC_OUTSIDE_REQ]",
+    "line 7: AC-002 is not inside a REQ block [AC_OUTSIDE_REQ]"
+  ]
+}

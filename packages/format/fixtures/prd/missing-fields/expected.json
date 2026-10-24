@@ -1,0 +1,11 @@
+{
+  "ids": [
+    "REQ-001",
+    "REQ-002"
+  ],
+  "errors": [
+    "line 1: REQ-001 has no **Status:** field [MISSING_STATUS]",
+    "line 1: REQ-001 has no **Criticality:** field [MISSING_CRITICALITY]",
+    "line 3: REQ-002 has no **Status:** field [MISSING_STATUS]"
+  ]
+}

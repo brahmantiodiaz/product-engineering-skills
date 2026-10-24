@@ -1,0 +1,9 @@
+{
+  "ids": [
+    "REQ-001"
+  ],
+  "errors": [
+    "line 2: REQ-001 has unknown status \"Decided\"; allowed: proposed, decided, verified, open, conflicted, not-applicable, removed [UNKNOWN_STATUS]",
+    "line 2: REQ-001 has unknown criticality \"critical\"; allowed: blocker, major, minor [UNKNOWN_CRITICALITY]"
+  ]
+}

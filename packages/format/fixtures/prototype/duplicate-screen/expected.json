@@ -1,0 +1,15 @@
+{
+  "screens": [
+    {
+      "name": "home",
+      "line": 1,
+      "reqIds": [
+        "REQ-001"
+      ]
+    }
+  ],
+  "uncovered": [],
+  "errors": [
+    "line 2: Duplicate screen \"home\", first defined on line 1 [DUPLICATE_SCREEN]"
+  ]
+}

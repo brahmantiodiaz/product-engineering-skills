@@ -1,0 +1,10 @@
+{
+  "diff": {
+    "added": [],
+    "changed": [],
+    "removed": []
+  },
+  "errors": [
+    "line 2: REQ-001 was removed and cannot be reused [ID_REUSED]"
+  ]
+}

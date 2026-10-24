@@ -1,0 +1,10 @@
+{
+  "ids": [
+    "REQ-001",
+    "AC-001"
+  ],
+  "errors": [
+    "line 4: Duplicate ID AC-001, first defined on line 3 [DUPLICATE_ID]",
+    "line 5: Duplicate ID REQ-001, first defined on line 1 [DUPLICATE_ID]"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "sections": [
+    {
+      "heading": "API",
+      "implements": [
+        "REQ-001",
+        "REQ-002",
+        "REQ-009"
+      ]
+    }
+  ],
+  "errors": [
+    "line 2: REQ-002 is removed in the PRD [REFERENCE_TO_REMOVED]",
+    "line 2: REQ-009 does not exist in the PRD [UNKNOWN_REFERENCE]"
+  ]
+}

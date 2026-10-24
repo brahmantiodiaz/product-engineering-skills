@@ -1,0 +1,14 @@
+{
+  "diff": {
+    "added": [
+      "REQ-004"
+    ],
+    "changed": [
+      "REQ-002"
+    ],
+    "removed": [
+      "REQ-003"
+    ]
+  },
+  "errors": []
+}
