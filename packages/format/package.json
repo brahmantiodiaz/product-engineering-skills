@@ -1,0 +1,34 @@
+{
+  "name": "@pes/format",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Parser and validator for PES PRD, spec, and prototype formats",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./fixtures/*": "./fixtures/*"
+  },
+  "files": [
+    "dist",
+    "fixtures"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "htmlparser2": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}
