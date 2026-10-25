@@ -43,6 +43,9 @@ Plans and tasks are created and executed locally by the agent, using PES skills 
 | Prototype | One HTML file with multiple screens (hash routing), inline CSS/JS, `data-req` annotations |
 | Feedback from local | Sub-ticket status and PR link only |
 | Stack | TypeScript throughout: Next.js, Postgres (RLS), object storage, Node CLI (npm) |
+| Hosting | One VPS running Docker Compose: Postgres, MinIO (object storage), the Next.js app, and Caddy (TLS) |
+| Web auth | Better Auth (open-source library inside the app, data in our Postgres); Google and GitHub sign-in |
+| Web editor | CodeMirror 6 editing markdown source directly |
 | MVP harnesses | Claude Code and Codex |
 | Language | See section 4 |
 
@@ -70,8 +73,10 @@ The `@pes/format` parser recognizes only these fixed English keywords. A PRD wri
    └── THIRD_PARTY_NOTICES.md      attribution for mattpocock/skills and Superpowers
 
 2. pes-platform                    private
-   └── apps/web/                   Next.js (UI + API), depends on @pes/format from npm
+   └── apps/web/                   Next.js (UI + API), depends on @pes/format from GitHub Packages
 ```
+
+`@pes/format` is published to GitHub Packages. GitHub requires the package scope to match the repository owner, so it is published as `@brahmantiodiaz/format`. Consumers install it under an npm alias (`"@pes/format": "npm:@brahmantiodiaz/format@<version>"`) so code everywhere imports `@pes/format`. Inside the skills repo, the CLI depends on it with `file:../format`.
 
 New skills go in `skills/pes/` and changes to upstream skills are kept minimal, so merges from upstream rarely conflict.
 
@@ -205,7 +210,7 @@ When an `approved` artifact receives a new revision:
 
 ### 9.1 Web login
 
-Web login uses a managed auth provider with Google, GitHub, and email magic links. The specific provider is chosen during M2 planning.
+Web login uses Better Auth, an open-source library that runs inside the Next.js app and stores users and sessions in our Postgres. Sign-in is with Google and GitHub. Email magic links are out of the MVP because the MVP sends no email (9.6).
 
 ### 9.2 Device flow for the CLI
 
@@ -395,6 +400,7 @@ Everything described in sections 4 to 13.
 - OMP adapter
 - Jira/GitHub Issues integration
 - Email notifications
+- Email magic-link login
 
 ## 15. Milestones
 
@@ -428,8 +434,5 @@ One real OSS/BSS feature runs from discovery to PR, where:
 
 | Decision | Milestone |
 |---|---|
-| Web auth provider | M2 |
-| Hosting, Postgres, and object storage providers | M2 |
-| App domain and usercontent domain names | M2 / M5 |
+| App domain and usercontent domain names | First deployment / M5 |
 | CDN allowlist for prototype CSP | M5 |
-| Web markdown editor library | M2 |
