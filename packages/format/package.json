@@ -1,9 +1,16 @@
 {
-  "name": "@pes/format",
+  "name": "@brahmantiodiaz/format",
   "version": "0.1.0",
-  "private": true,
   "description": "Parser and validator for PES PRD, spec, and prototype formats",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brahmantiodiaz/product-engineering-skills.git",
+    "directory": "packages/format"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

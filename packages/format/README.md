@@ -2,6 +2,23 @@
 
 Parser and validator for the Product Engineering Skills (PES) artifact formats: PRDs, specs, and HTML prototypes. It turns each artifact into an index of requirement (`REQ-`) and acceptance criterion (`AC-`) IDs, enforces the ID rules, and computes per-requirement diffs between revisions. The CLI, the platform server, and the web editor all use this one package, so every consumer reports the same errors with the same text. It has no Node built-in dependencies and runs in the browser too.
 
+## Installing
+
+The package is published to GitHub Packages as `@brahmantiodiaz/format`, because GitHub requires the scope to match the repository owner. Point that scope at the GitHub registry in the consumer's `.npmrc`, with a token that has `read:packages`:
+
+```
+@brahmantiodiaz:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+```
+
+Then install it under an alias so imports stay `@pes/format`:
+
+```json
+"dependencies": {
+  "@pes/format": "npm:@brahmantiodiaz/format@0.1.0"
+}
+```
+
 ## API
 
 | Function | Purpose |
