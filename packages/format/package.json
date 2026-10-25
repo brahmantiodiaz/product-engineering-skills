@@ -1,11 +1,11 @@
 {
-  "name": "@brahmantiodiaz/format",
+  "name": "@gyrospec/format",
   "version": "0.1.0",
-  "description": "Parser and validator for PES PRD, spec, and prototype formats",
+  "description": "Parser and validator for Gyrospec PRD, spec, and prototype formats",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/brahmantiodiaz/product-engineering-skills.git",
+    "url": "https://github.com/gyrospec/skills.git",
     "directory": "packages/format"
   },
   "publishConfig": {

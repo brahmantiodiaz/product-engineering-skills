@@ -1,19 +1,19 @@
-# M1 `@pes/format` Implementation Plan
+# M1 `@gyrospec/format` Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the `@pes/format` package, which parses PRDs, specs, and prototypes into REQ/AC indexes, validates the ID rules, and computes per-requirement diffs, with error text identical for every consumer.
+**Goal:** Build the `@gyrospec/format` package, which parses PRDs, specs, and prototypes into REQ/AC indexes, validates the ID rules, and computes per-requirement diffs, with error text identical for every consumer.
 
 **Architecture:** A pure TypeScript ESM library with no Node built-ins in `src/`, so the CLI, the server, and the browser editor can all use it. Markdown is scanned line by line (fence-aware). Prototype HTML is scanned with `htmlparser2`. Golden fixtures in `fixtures/` ship with the package so the CLI (M3) and the platform (M2) run the same cases.
 
 **Tech Stack:** TypeScript (strict), Node 24, npm, Vitest, htmlparser2.
 
-**Spec:** `docs/superpowers/specs/2026-10-25-product-engineering-skills-design.md` (sections 4, 5.2, 7, 8.2 item 4, 8.3, 12 row "Invalid format", 13 item 1)
+**Spec:** `docs/superpowers/specs/2026-10-25-gyrospec-design.md` (sections 4, 5.2, 7, 8.2 item 4, 8.3, 12 row "Invalid format", 13 item 1)
 
 ## Global Constraints
 
-- Package location: `packages/format/` in the `product-engineering-skills` repo. The package stands alone (its own `package.json` and `package-lock.json`). The upstream root `package.json` is **not** changed in M1.
-- Package name `@pes/format`, version `0.1.0`, `"private": true` (npm publishing is decided in M3).
+- Package location: `packages/format/` in the `gyrospec/skills` repo. The package stands alone (its own `package.json` and `package-lock.json`). The upstream root `package.json` is **not** changed in M1.
+- Package name `@gyrospec/format`, version `0.1.0`, `"private": true` (npm publishing is decided in M3).
 - `"type": "module"`. Build output goes to `dist/` (ESM plus `.d.ts`).
 - `src/` must not import Node built-ins (`node:*`, `fs`, `crypto`, `path`). Tests may.
 - The only runtime dependency is `htmlparser2`.
@@ -94,7 +94,7 @@ Every command below runs from `packages/format/`.
 
 - [ ] **Step 1: Create `package.json`**
 
-  Fields: `name: "@pes/format"`, `version: "0.1.0"`, `private: true`, `type: "module"`, `license: "MIT"`, `main: "./dist/index.js"`, `types: "./dist/index.d.ts"`, `exports: { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }, "./fixtures/*": "./fixtures/*" }`, `files: ["dist", "fixtures"]`, scripts `test: "vitest run"`, `typecheck: "tsc --noEmit"`, `build: "tsc -p tsconfig.build.json"`.
+  Fields: `name: "@gyrospec/format"`, `version: "0.1.0"`, `private: true`, `type: "module"`, `license: "MIT"`, `main: "./dist/index.js"`, `types: "./dist/index.d.ts"`, `exports: { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }, "./fixtures/*": "./fixtures/*" }`, `files: ["dist", "fixtures"]`, scripts `test: "vitest run"`, `typecheck: "tsc --noEmit"`, `build: "tsc -p tsconfig.build.json"`.
 
 - [ ] **Step 2: Install dependencies**
 
@@ -169,7 +169,7 @@ Every command below runs from `packages/format/`.
 
   ```bash
   git add packages/format
-  git commit -m "feat(format): scaffold @pes/format with error model"
+  git commit -m "feat(format): scaffold @gyrospec/format with error model"
   ```
 
 ---
@@ -714,7 +714,7 @@ Every command below runs from `packages/format/`.
 
 - [ ] **Step 6: Write `README.md`**
 
-  Contents: the package's purpose (one paragraph), the public functions with a one-line description each, the format conventions with a pointer to spec section 7, the English-only keyword rule (spec section 4), and how another package uses the fixtures (`@pes/format/fixtures/...`). No em-dashes.
+  Contents: the package's purpose (one paragraph), the public functions with a one-line description each, the format conventions with a pointer to spec section 7, the English-only keyword rule (spec section 4), and how another package uses the fixtures (`@gyrospec/format/fixtures/...`). No em-dashes.
 
 - [ ] **Step 7: Commit**
 

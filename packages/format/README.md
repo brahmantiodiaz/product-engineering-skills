@@ -1,21 +1,21 @@
-# @pes/format
+# @gyrospec/format
 
-Parser and validator for the Product Engineering Skills (PES) artifact formats: PRDs, specs, and HTML prototypes. It turns each artifact into an index of requirement (`REQ-`) and acceptance criterion (`AC-`) IDs, enforces the ID rules, and computes per-requirement diffs between revisions. The CLI, the platform server, and the web editor all use this one package, so every consumer reports the same errors with the same text. It has no Node built-in dependencies and runs in the browser too.
+Parser and validator for the Gyrospec artifact formats: PRDs, specs, and HTML prototypes. It turns each artifact into an index of requirement (`REQ-`) and acceptance criterion (`AC-`) IDs, enforces the ID rules, and computes per-requirement diffs between revisions. The CLI, the platform server, and the web editor all use this one package, so every consumer reports the same errors with the same text. It has no Node built-in dependencies and runs in the browser too.
 
 ## Installing
 
-The package is published to GitHub Packages as `@brahmantiodiaz/format`, because GitHub requires the scope to match the repository owner. Point that scope at the GitHub registry in the consumer's `.npmrc`, with a token that has `read:packages`:
+The package is published to GitHub Packages under the `gyrospec` organization. Point the scope at the GitHub registry in the consumer's `.npmrc`, with a token that has `read:packages` (GitHub requires one even for public packages):
 
 ```
-@brahmantiodiaz:registry=https://npm.pkg.github.com
+@gyrospec:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
-Then install it under an alias so imports stay `@pes/format`:
+Then depend on it by name:
 
 ```json
 "dependencies": {
-  "@pes/format": "npm:@brahmantiodiaz/format@0.1.0"
+  "@gyrospec/format": "0.1.0"
 }
 ```
 
@@ -37,7 +37,7 @@ Every parser returns an `errors` array of `{ code, line, message }`. Line `0` me
 
 ## Format
 
-The conventions are defined in section 7 of the [PES design spec](../../docs/superpowers/specs/2026-10-25-product-engineering-skills-design.md):
+The conventions are defined in section 7 of the [Gyrospec design spec](../../docs/superpowers/specs/2026-10-25-gyrospec-design.md):
 
 ```md
 ### REQ-001 Agreement required before Product Order
@@ -62,7 +62,7 @@ fixtures/spec/<case>/prd.md + input.md + expected.json
 fixtures/prototype/<case>/prd.md + input.html + expected.json
 ```
 
-They are published with the package and resolve as `@pes/format/fixtures/<kind>/<case>/<file>`. `test/fixtures.test.ts` shows how each kind maps to the public functions. Every `errors` entry is `formatError` output ordered by line, so the fixtures also lock the message text.
+They are published with the package and resolve as `@gyrospec/format/fixtures/<kind>/<case>/<file>`. `test/fixtures.test.ts` shows how each kind maps to the public functions. Every `errors` entry is `formatError` output ordered by line, so the fixtures also lock the message text.
 
 ## Development
 

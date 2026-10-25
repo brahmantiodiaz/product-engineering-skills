@@ -1,27 +1,27 @@
-# Product Engineering Skills (PES): Design Spec
+# Gyrospec: Design Spec
 
 - **Date:** 2026-10-25
 - **Status:** Approved
-- **Scope:** Skills fork (mattpocock/skills), the `@pes/format` package, the `pes` CLI, and the PES SaaS platform
+- **Scope:** Skills fork (mattpocock/skills), the `@gyrospec/format` package, the `gyro` CLI, and the Gyrospec SaaS platform
 
 ---
 
 ## 1. Summary
 
-PES is a **human-driven** product engineering framework for coding agents (Claude Code and Codex). The flow is: discovery, PRD, clickable HTML prototype, spec, sub-tickets, then local planning and execution.
+Gyrospec is a **human-driven** product engineering framework for coding agents (Claude Code and Codex). The flow is: discovery, PRD, clickable HTML prototype, spec, sub-tickets, then local planning and execution.
 
 The system has two sides:
 
-1. **Client side (open source, MIT):** a fork of `mattpocock/skills` containing the PES skills, the `@pes/format` package, and the `pes` CLI.
+1. **Client side (open source, MIT):** a fork of `mattpocock/skills` containing the Gyrospec skills, the `@gyrospec/format` package, and the `gyro` CLI.
 2. **SaaS platform (private):** the source of truth for PRDs, prototypes, specs, tickets, sub-tickets, and approvals. The web app is used to view, edit, comment, approve, and preview prototypes.
 
-Plans and tasks are created and executed locally by the agent, using PES skills or Superpowers. The platform stores neither plans nor tasks. The only data sent back is sub-ticket status and PR links.
+Plans and tasks are created and executed locally by the agent, using Gyrospec skills or Superpowers. The platform stores neither plans nor tasks. The only data sent back is sub-ticket status and PR links.
 
 ## 2. Principles
 
 1. **Human-driven.** The AI explores, proposes, and drafts. A human decides when a phase may proceed.
 2. **Approval by humans only.** Tokens held by an agent never carry approval rights.
-3. **One source for format rules.** The ID parser and validator live only in `@pes/format` and are used by the CLI, the server, and the web editor.
+3. **One source for format rules.** The ID parser and validator live only in `@gyrospec/format` and are used by the CLI, the server, and the web editor.
 4. **Readable by agents and humans.** Every artifact is plain markdown (prototypes are HTML).
 5. **No silent changes after approval.** Approval is bound to a revision, and requirement changes mark downstream artifacts as stale.
 
@@ -29,7 +29,7 @@ Plans and tasks are created and executed locally by the agent, using PES skills 
 
 | Area | Decision |
 |---|---|
-| Skills foundation | Fork `mattpocock/skills`; new skills live in their own folder, `skills/pes/` |
+| Skills foundation | Fork `mattpocock/skills`; new skills live in their own folder, `skills/gyro/` |
 | Platform | Built in-house (Plane is not forked). Plane is a UX reference only; no code is copied |
 | Source of truth | Platform: PRD, prototype, spec, ticket, sub-ticket, approval |
 | Local | Agent-owned plans and tasks. Not synced to the platform |
@@ -43,6 +43,8 @@ Plans and tasks are created and executed locally by the agent, using PES skills 
 | Prototype | One HTML file with multiple screens (hash routing), inline CSS/JS, `data-req` annotations |
 | Feedback from local | Sub-ticket status and PR link only |
 | Stack | TypeScript throughout: Next.js, Postgres (RLS), object storage, Node CLI (npm) |
+| Name and home | Gyrospec; GitHub organization `gyrospec` (repos `gyrospec/skills` and `gyrospec/platform`); package scope `@gyrospec`; CLI command `gyro`; skill prefix `gyro-` |
+| App domain | A subdomain of `brahmantiodiaz.com` (for example `gyrospec.brahmantiodiaz.com`); `gyrospec.com` belongs to someone else |
 | Hosting | One VPS running Docker Compose: Postgres, MinIO (object storage), the Next.js app, and Caddy (TLS) |
 | Web auth | Better Auth (open-source library inside the app, data in our Postgres); Google and GitHub sign-in |
 | Web editor | CodeMirror 6 editing markdown source directly |
@@ -58,59 +60,61 @@ Plans and tasks are created and executed locally by the agent, using PES skills 
 | PRD and spec prose | Follows the user's language or the workspace setting |
 | Convention keywords: `REQ-`, `AC-`, `**Status:**`, `**Criticality:**`, `**Implements:**`, and their allowed values (`decided`, `blocker`, and so on) | **Always English**, regardless of the document's language |
 
-The `@pes/format` parser recognizes only these fixed English keywords. A PRD written in Indonesian still writes `**Status:** decided`, never a translated value. Skills instruct the agent to reply in the user's language while keeping the keywords unchanged.
+The `@gyrospec/format` parser recognizes only these fixed English keywords. A PRD written in Indonesian still writes `**Status:** decided`, never a translated value. Skills instruct the agent to reply in the user's language while keeping the keywords unchanged.
 
 ## 5. Architecture
 
 ### 5.1 Repositories
 
 ```
-1. product-engineering-skills      fork of mattpocock/skills, public, MIT
+1. gyrospec/skills                 fork of mattpocock/skills, public, MIT
    ├── skills/…                    upstream skills (changed as little as possible)
-   ├── skills/pes/…                PES skills
-   ├── packages/format/            @pes/format
-   ├── packages/cli/               @pes/cli (the `pes` command)
+   ├── skills/gyro/…               Gyrospec skills
+   ├── packages/format/            @gyrospec/format
+   ├── packages/cli/               @gyrospec/cli (the `gyro` command)
    └── THIRD_PARTY_NOTICES.md      attribution for mattpocock/skills and Superpowers
 
-2. pes-platform                    private
-   └── apps/web/                   Next.js (UI + API), depends on @pes/format from GitHub Packages
+2. gyrospec/platform               private
+   └── apps/web/                   Next.js (UI + API), depends on @gyrospec/format from GitHub Packages
 ```
 
-`@pes/format` is published to GitHub Packages. GitHub requires the package scope to match the repository owner, so it is published as `@brahmantiodiaz/format`. Consumers install it under an npm alias (`"@pes/format": "npm:@brahmantiodiaz/format@<version>"`) so code everywhere imports `@pes/format`. Inside the skills repo, the CLI depends on it with `file:../format`.
+Both repositories belong to the GitHub organization `gyrospec`. Work in the skills repo happens on `main`. Upstream updates come in with `git fetch upstream && git merge upstream/main`, never with GitHub's "Sync fork > Discard commits", which would drop the Gyrospec commits.
 
-New skills go in `skills/pes/` and changes to upstream skills are kept minimal, so merges from upstream rarely conflict.
+`@gyrospec/format` is published to GitHub Packages under the `gyrospec` organization, and the platform depends on it by that name. Inside the skills repo, the CLI depends on it with `file:../format`. GitHub Packages requires a token even for public packages, so the CLI (M3) is published to the public npm registry instead, under an npm organization `gyrospec` that has not been created yet.
+
+New skills go in `skills/gyro/` and changes to upstream skills are kept minimal, so merges from upstream rarely conflict.
 
 ### 5.2 Components
 
 | Component | Responsibility | Depends on |
 |---|---|---|
-| PES skills | Guide each phase and call the CLI | CLI, upstream skills (`grilling`, `domain-modeling`, `prototype`, `to-tickets`, `tdd`, `code-review`) |
-| `@pes/format` | Parse PRD/spec into a REQ/AC index, validate IDs, diff per requirement, read `data-req` from prototypes | none |
-| `pes` CLI | Auth, artifact push/pull, approval, status updates | `@pes/format`, platform API |
-| Platform web/API | Workspaces, members, tickets, artifacts and revisions, editor, comments, approvals, sub-ticket status | `@pes/format`, Postgres, object storage, auth provider |
+| Gyrospec skills | Guide each phase and call the CLI | CLI, upstream skills (`grilling`, `domain-modeling`, `prototype`, `to-tickets`, `tdd`, `code-review`) |
+| `@gyrospec/format` | Parse PRD/spec into a REQ/AC index, validate IDs, diff per requirement, read `data-req` from prototypes | none |
+| `gyro` CLI | Auth, artifact push/pull, approval, status updates | `@gyrospec/format`, platform API |
+| Platform web/API | Workspaces, members, tickets, artifacts and revisions, editor, comments, approvals, sub-ticket status | `@gyrospec/format`, Postgres, object storage, auth provider |
 | Postgres + RLS | Storage; tenant isolation enforced in the database | none |
 | Object storage + usercontent domain | Store prototypes and serve them from a separate origin | none |
 
-The `setup-matt-pocock-skills` skill gets a new tracker option, **"PES Platform"**, so upstream skills such as `to-tickets` can publish to the platform.
+The `setup-matt-pocock-skills` skill gets a new tracker option, **"Gyrospec Platform"**, so upstream skills such as `to-tickets` can publish to the platform.
 
 ### 5.3 End-to-end flow
 
 ```
-[local] /pes-discovery (chat) → /pes-prd → pes push prd ──────────► Ticket: PRD draft
-                                   pes approve prd → click ───────► PRD approved
-[local] /pes-prototype → pes push prototype ──────────────────────► Prototype draft
-                                   pes approve prototype → click ─► Prototype approved
-[local] /pes-spec → pes push spec ────────────────────────────────► Spec draft
-                                   pes approve spec → click ──────► Spec approved
-[local] /pes-breakdown → pes push subtickets ─────────────────────► Sub-tickets PROJ-12.1..n
+[local] /gyro-discovery (chat) → /gyro-prd → gyro push prd ──────────► Ticket: PRD draft
+                                   gyro approve prd → click ───────► PRD approved
+[local] /gyro-prototype → gyro push prototype ──────────────────────► Prototype draft
+                                   gyro approve prototype → click ─► Prototype approved
+[local] /gyro-spec → gyro push spec ────────────────────────────────► Spec draft
+                                   gyro approve spec → click ──────► Spec approved
+[local] /gyro-breakdown → gyro push subtickets ─────────────────────► Sub-tickets PROJ-12.1..n
 
-[dev agent] /pes-writing-plans PROJ-12.3
-   → pes pull → docs/superpowers/specs/<date>-proj-12-3-design.md
+[dev agent] /gyro-writing-plans PROJ-12.3
+   → gyro pull → docs/superpowers/specs/<date>-proj-12-3-design.md
    → plan in docs/superpowers/plans/
-[dev agent] /pes-executing-plans
-   → pes ticket update PROJ-12.3 --status in_progress
+[dev agent] /gyro-executing-plans
+   → gyro ticket update PROJ-12.3 --status in_progress
    → tasks executed (tdd, code-review)
-   → pes ticket update PROJ-12.3 --status done --pr <url> ──────► Sub-ticket status
+   → gyro ticket update PROJ-12.3 --status done --pr <url> ──────► Sub-ticket status
 ```
 
 ## 6. Data model
@@ -162,11 +166,11 @@ Specs follow the Superpowers design doc style: architecture, components, data fl
 
 A prototype is one HTML file. Screens are separated by hash routing (`#/screen-name`), and elements representing requirements are marked `data-req="REQ-001"`. One element may represent several requirements (`data-req="REQ-001 REQ-004"`).
 
-Each screen is wrapped in an element with `data-screen="<name>"`, where the name matches its route (`#/<name>`). This lets `@pes/format` tell which `data-req` belongs to which screen, so the platform can highlight stale screens. Screen names are unique within one prototype.
+Each screen is wrapped in an element with `data-screen="<name>"`, where the name matches its route (`#/<name>`). This lets `@gyrospec/format` tell which `data-req` belongs to which screen, so the platform can highlight stale screens. Screen names are unique within one prototype.
 
 ### 7.4 ID rules
 
-These rules are enforced by `@pes/format`, both in the CLI before a push and on the server on save.
+These rules are enforced by `@gyrospec/format`, both in the CLI before a push and on the server on save.
 
 1. IDs are scoped per ticket.
 2. IDs are never renumbered or reused. A deleted requirement gets status `removed` and stays in the document.
@@ -199,7 +203,7 @@ These rules are enforced by `@pes/format`, both in the CLI before a push and on 
 When an `approved` artifact receives a new revision:
 
 1. That artifact's gate returns to `draft` and needs re-approval.
-2. `@pes/format` computes which REQ IDs were added, changed, or removed between the last approved revision and the new one.
+2. `@gyrospec/format` computes which REQ IDs were added, changed, or removed between the last approved revision and the new one.
 3. Downstream items referencing those IDs are marked stale:
    - PRD change: the prototype gate becomes `stale` if any screen has a matching `data-req` (those screens are highlighted on the platform), the spec gate becomes `stale` if any section has a matching `Implements` (those sections are highlighted), and sub-tickets with matching `refs` get the `stale` flag.
    - Spec change: sub-tickets created from an earlier spec revision that reference REQs whose `Implements` sections changed get the `stale` flag.
@@ -216,18 +220,18 @@ Web login uses Better Auth, an open-source library that runs inside the Next.js 
 
 Device flow (RFC 8628) is implemented by the platform itself.
 
-1. `pes login` requests a `device_code` and `user_code`.
+1. `gyro login` requests a `device_code` and `user_code`.
 2. The CLI shows the verification URL with the code and opens the browser.
-3. On the web (already signed in), the user sees "pes CLI on `<hostname>` requests access to workspace X" and clicks **Allow**.
+3. On the web (already signed in), the user sees "gyro CLI on `<hostname>` requests access to workspace X" and clicks **Allow**.
 4. The CLI polls until it receives an access token (1 hour) and a refresh token (30 days, rotated on every use).
-5. Tokens are stored in the OS keychain. When no keychain is available, they are stored in `~/.config/pes/credentials.json` with permission 0600.
+5. Tokens are stored in the OS keychain. When no keychain is available, they are stored in `~/.config/gyro/credentials.json` with permission 0600.
 
 - **CLI token scopes:** `read`, `write:artifacts`, `write:status`, `comment`. The `approve` scope is **never** granted to CLI tokens.
 - CLI sessions can be listed and revoked on the web.
 
 ### 9.3 Approval started from the CLI
 
-1. `pes approve <gate> <ticket>` creates an `ApprovalRequest` bound to the current revision and sha256, expiring in 10 minutes.
+1. `gyro approve <gate> <ticket>` creates an `ApprovalRequest` bound to the current revision and sha256, expiring in 10 minutes.
 2. The CLI prints a summary (gate, revision, REQ diff since the last approval, blockers) and opens `/approve/<id>`.
 3. The web page shows the same summary with **Approve** and **Reject** buttons. The page requires an active web session and CSRF protection.
 4. On click, the server re-checks:
@@ -246,7 +250,7 @@ Device flow (RFC 8628) is implemented by the platform itself.
 
 ### 9.5 Prototype sandbox
 
-- Prototypes are served from a separate registrable domain, for example `*.pes-usercontent.com`, with one subdomain per workspace. This domain is not a subdomain of the app domain.
+- Prototypes are served from a separate registrable domain, for example `*.<usercontent-domain>` (see section 18), with one subdomain per workspace. This domain is not a subdomain of the app domain.
 - Prototypes render in `<iframe sandbox="allow-scripts">` without `allow-same-origin`.
 - CSP:
   - `connect-src 'none'`;
@@ -276,24 +280,24 @@ Post-MVP mitigation: confirm approvals with a passkey (WebAuthn with user verifi
 ### 10.1 Principles
 
 - Every phase is a **user-invoked** skill that ends by suggesting the next command, never proceeding on its own. This matches the upstream rule that a user-invoked skill never invokes another user-invoked skill, and it keeps the flow human-driven.
-- PES skills reuse the upstream model-invoked skills `grilling`, `domain-modeling`, `tdd`, and `code-review`.
-- Every skill checks its prerequisites via `pes status` before doing any work.
-- Every skill name has the `pes-` prefix so it does not clash with Superpowers.
+- Gyrospec skills reuse the upstream model-invoked skills `grilling`, `domain-modeling`, `tdd`, and `code-review`.
+- Every skill checks its prerequisites via `gyro status` before doing any work.
+- Every skill name has the `gyro-` prefix so it does not clash with Superpowers.
 - Skills follow the language rules in section 4.
 
 ### 10.2 Skill list
 
 | Skill | Prerequisites | Behavior | Output |
 |---|---|---|---|
-| `/pes-discovery` | none | Interview using `grilling`, one question per turn. At the start, the user picks a feature size (10.3). Every answer is classified as fact, decision, assumption, or open question. The user confirms criticality. AI recommendations are never treated as decisions | `.pes/<ticket>/discovery.md` |
-| `/pes-prd` | Discovery with no `blocker` REQ that is `open`/`conflicted` | Writes the PRD per 7.1, then runs `pes check` and `pes push prd`. The ticket is created if it does not exist. Adds no requirement that is not in discovery | PRD draft |
-| `/pes-prototype` | PRD approved | Adapts the upstream `prototype` skill: one HTML with multiple screens and `data-req`, plus a report of REQs without a screen | Prototype draft |
-| `/pes-spec` | PRD approved; prototype approved or N/A | Superpowers-style design doc with `Implements:` in each section | Spec draft |
-| `/pes-breakdown` | Spec approved | Adapts `to-tickets`: tracer-bullet sub-tickets with `refs` and `blocked_by` | Sub-tickets |
-| `/pes-writing-plans <sub>` | Sub-ticket exists | Adapts Superpowers `writing-plans`. Runs `pes pull`, writes the spec to `docs/superpowers/specs/`, then writes the plan to `docs/superpowers/plans/` with a `ticket`, `sub_ticket`, `spec_revision` header. Every task references REQ/AC | Local plan |
-| `/pes-executing-plans` | Plan exists; `spec_revision` is still current and the sub-ticket is not stale | Adapts Superpowers `executing-plans`. Updates status automatically: `in_progress` on start, `blocked` with a reason when a human is needed, and `done` with a PR link after verification | Code, PR, sub-ticket status |
+| `/gyro-discovery` | none | Interview using `grilling`, one question per turn. At the start, the user picks a feature size (10.3). Every answer is classified as fact, decision, assumption, or open question. The user confirms criticality. AI recommendations are never treated as decisions | `.gyro/<ticket>/discovery.md` |
+| `/gyro-prd` | Discovery with no `blocker` REQ that is `open`/`conflicted` | Writes the PRD per 7.1, then runs `gyro check` and `gyro push prd`. The ticket is created if it does not exist. Adds no requirement that is not in discovery | PRD draft |
+| `/gyro-prototype` | PRD approved | Adapts the upstream `prototype` skill: one HTML with multiple screens and `data-req`, plus a report of REQs without a screen | Prototype draft |
+| `/gyro-spec` | PRD approved; prototype approved or N/A | Superpowers-style design doc with `Implements:` in each section | Spec draft |
+| `/gyro-breakdown` | Spec approved | Adapts `to-tickets`: tracer-bullet sub-tickets with `refs` and `blocked_by` | Sub-tickets |
+| `/gyro-writing-plans <sub>` | Sub-ticket exists | Adapts Superpowers `writing-plans`. Runs `gyro pull`, writes the spec to `docs/superpowers/specs/`, then writes the plan to `docs/superpowers/plans/` with a `ticket`, `sub_ticket`, `spec_revision` header. Every task references REQ/AC | Local plan |
+| `/gyro-executing-plans` | Plan exists; `spec_revision` is still current and the sub-ticket is not stale | Adapts Superpowers `executing-plans`. Updates status automatically: `in_progress` on start, `blocked` with a reason when a human is needed, and `done` with a PR link after verification | Code, PR, sub-ticket status |
 
-Agents using plain Superpowers `writing-plans` or `executing-plans` can still work from `pes pull` output and update status manually through the CLI.
+Agents using plain Superpowers `writing-plans` or `executing-plans` can still work from `gyro pull` output and update status manually through the CLI.
 
 ### 10.3 Discovery size
 
@@ -318,10 +322,10 @@ There are 10 discovery dimensions:
 - Non-required dimensions may be skipped.
 - A required dimension may be marked `not-applicable`, with a reason.
 
-### 10.4 Local `.pes/` folder
+### 10.4 Local `.gyro/` folder
 
 ```
-.pes/
+.gyro/
 ├── config.json          workspace + project (committed)
 └── <ticket>/
     ├── discovery.md     discovery log (committed)
@@ -330,7 +334,7 @@ There are 10 discovery dimensions:
 
 ### 10.5 Edits from both sides
 
-1. When `pes push` is rejected because of a stale revision (409), the skill runs `pes pull`.
+1. When `gyro push` is rejected because of a stale revision (409), the skill runs `gyro pull`.
 2. The skill merges the changes and shows the user the diff.
 3. After the user accepts the merged result, the skill pushes again.
 
@@ -338,33 +342,33 @@ There are 10 discovery dimensions:
 
 | Command | Purpose |
 |---|---|
-| `pes login` / `pes logout` | Device flow / revoke the session |
-| `pes init` | Create `.pes/config.json` (pick workspace and project) |
-| `pes check <file>` | Validate format locally |
-| `pes push prd\|prototype\|spec <ticket> [file]` | Upload a new revision (with `base_revision`) |
-| `pes push subtickets <ticket> <file>` | Create or update sub-tickets in one batch |
-| `pes pull <ticket\|sub-ticket>` | Download artifacts. For a sub-ticket, also writes a Superpowers-style spec file |
-| `pes status [ticket]` | Gate status, staleness, and sub-tickets |
-| `pes approve <gate> <ticket>` | Start an approval via a confirmation link |
-| `pes ticket update <sub> --status … [--reason …] [--pr …]` | Update sub-ticket status |
+| `gyro login` / `gyro logout` | Device flow / revoke the session |
+| `gyro init` | Create `.gyro/config.json` (pick workspace and project) |
+| `gyro check <file>` | Validate format locally |
+| `gyro push prd\|prototype\|spec <ticket> [file]` | Upload a new revision (with `base_revision`) |
+| `gyro push subtickets <ticket> <file>` | Create or update sub-tickets in one batch |
+| `gyro pull <ticket\|sub-ticket>` | Download artifacts. For a sub-ticket, also writes a Superpowers-style spec file |
+| `gyro status [ticket]` | Gate status, staleness, and sub-tickets |
+| `gyro approve <gate> <ticket>` | Start an approval via a confirmation link |
+| `gyro ticket update <sub> --status … [--reason …] [--pr …]` | Update sub-ticket status |
 
 ## 12. Error handling
 
 | Situation | Behavior |
 |---|---|
 | Offline or network failure | The push fails with a clear message, with no silent queue. Every push carries a request ID so it is safe to retry |
-| Expired access token | Refreshed automatically. If refresh fails, the CLI asks for `pes login` |
+| Expired access token | Refreshed automatically. If refresh fails, the CLI asks for `gyro login` |
 | Stale revision | 409 with the latest revision, then the flow in 10.5 |
-| Invalid format | 422 with per-line errors, identical to `pes check` output |
-| ApprovalRequest expired or revision changed | Rejected with the reason. The user re-runs `pes approve` |
+| Invalid format | 422 with per-line errors, identical to `gyro check` output |
+| ApprovalRequest expired or revision changed | Rejected with the reason. The user re-runs `gyro approve` |
 | Gate rules not met | Rejected with the list of missing prerequisites or blockers |
-| Stale sub-ticket during execution | `pes-executing-plans` stops and asks for the plan to be reviewed. Updating to `done` is still allowed, with a warning |
+| Stale sub-ticket during execution | `gyro-executing-plans` stops and asks for the plan to be reviewed. Updating to `done` is still allowed, with a warning |
 | Prototype exceeds size limit | Rejected (default 5 MB per file) |
 | Cross-workspace access | 404, so resource existence does not leak |
 
 ## 13. Testing
 
-1. **`@pes/format`:** unit tests plus golden fixtures (markdown input to index, errors, diff) shared by the CLI and server test suites.
+1. **`@gyrospec/format`:** unit tests plus golden fixtures (markdown input to index, errors, diff) shared by the CLI and server test suites.
 2. **API (integration, real Postgres):**
    - cross-tenant isolation;
    - gate order;
@@ -408,13 +412,13 @@ Each milestone gets its own implementation plan.
 
 | # | Milestone | Content |
 |---|---|---|
-| M1 | `@pes/format` | Conventions, PRD/spec/prototype parsers, validator, REQ diff, golden fixtures |
+| M1 | `@gyrospec/format` | Conventions, PRD/spec/prototype parsers, validator, REQ diff, golden fixtures |
 | M2 | Platform core | Web login, workspaces/members/roles/invites, projects, tickets, artifacts and revisions, markdown editor, comments, RLS |
 | M3 | CLI | `login`, `init`, `check`, `push`, `pull`, `status` |
 | M4 | Gates and approvals | Web approval, CLI ApprovalRequest, gate rules, stale propagation |
 | M5 | Prototype hosting | Object storage, usercontent domain, sandbox, CSP, signed URLs |
-| M6 | Product-phase skills | Fork setup, `pes-discovery`, `pes-prd`, `pes-prototype`, `pes-spec`, `pes-breakdown`, tracker option in setup |
-| M7 | Sub-tickets and execution | Sub-tickets with `blocked_by`, `pes ticket update`, `pes-writing-plans`, `pes-executing-plans` |
+| M6 | Product-phase skills | Fork setup, `gyro-discovery`, `gyro-prd`, `gyro-prototype`, `gyro-spec`, `gyro-breakdown`, tracker option in setup |
+| M7 | Sub-tickets and execution | Sub-tickets with `blocked_by`, `gyro ticket update`, `gyro-writing-plans`, `gyro-executing-plans` |
 
 ## 16. MVP success criteria
 
@@ -422,7 +426,7 @@ One real OSS/BSS feature runs from discovery to PR, where:
 
 - human approval is recorded at all three gates;
 - sub-tickets are executed by an agent with status updated automatically;
-- the flow runs in Claude Code and Codex without losing context (decisions and artifacts are read from `.pes/` and the platform, not from chat history).
+- the flow runs in Claude Code and Codex without losing context (decisions and artifacts are read from `.gyro/` and the platform, not from chat history).
 
 ## 17. Licensing and attribution
 
@@ -434,5 +438,6 @@ One real OSS/BSS feature runs from discovery to PR, where:
 
 | Decision | Milestone |
 |---|---|
-| App domain and usercontent domain names | First deployment / M5 |
+| Exact app subdomain (for example `gyrospec.brahmantiodiaz.com`) | First deployment |
+| Prototype usercontent domain. Spec 9.5 requires a different registrable domain from the app, so no subdomain of `brahmantiodiaz.com` qualifies. M5 needs a second cheap domain or a free static-host domain | M5 |
 | CDN allowlist for prototype CSP | M5 |
