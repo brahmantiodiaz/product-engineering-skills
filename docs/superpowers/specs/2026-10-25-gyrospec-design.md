@@ -45,7 +45,7 @@ Plans and tasks are created and executed locally by the agent, using Gyrospec sk
 | Stack | TypeScript throughout: Next.js, Postgres (RLS), object storage, Node CLI (npm) |
 | Name and home | Gyrospec; GitHub organization `gyrospec` (repos `gyrospec/skills` and `gyrospec/platform`); package scope `@gyrospec`; CLI command `gyro`; skill prefix `gyro-` |
 | App domain | A subdomain of `brahmantiodiaz.com` (for example `gyrospec.brahmantiodiaz.com`); `gyrospec.com` belongs to someone else |
-| Hosting | One VPS running Docker Compose: Postgres, MinIO (object storage), the Next.js app, and Caddy (TLS) |
+| Hosting | One VPS running Docker Compose: Postgres, SeaweedFS (S3-compatible object storage; MinIO no longer publishes usable community images), the Next.js app, and Caddy (TLS) |
 | Web auth | Better Auth (open-source library inside the app, data in our Postgres); Google and GitHub sign-in |
 | Web editor | CodeMirror 6 editing markdown source directly |
 | MVP harnesses | Claude Code and Codex |
