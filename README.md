@@ -26,6 +26,10 @@ You type each phase; none of them moves to the next on its own.
 
 The model-invoked [`gyro`](skills/gyrospec/gyro/SKILL.md) skill is the shared reference the phases call: the `.gyro/` layout, the format conventions, running the script, and how approvals are asked for and recorded.
 
+## What it runs
+
+One local, readable script, `gyro.mjs`, run with `node` from your product repository's root. It reads and writes only `.gyro/` there, makes no network requests, and reads no credentials. The phase skills write your PRD, prototype, spec, sub-tickets, and plans in the repository, and the executing skill runs `git status`, `git diff`, and your tests. No hooks, MCP servers, or installs. It needs an agent with a shell and Node 20 or later, such as Claude Code or Codex. Details: [skills/gyrospec/README.md](skills/gyrospec/README.md#what-it-runs-and-what-it-touches).
+
 ## Installation
 
 Gyrospec installs in any agent that reads Agent Skills folders (`SKILL.md`). Install two plugins from the [Gyrospec marketplace](https://github.com/gyrospec/marketplace): `gyrospec`, and `gyrospec-upstream-skills`, which provides the upstream skills the phases call.

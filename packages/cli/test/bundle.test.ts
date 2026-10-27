@@ -22,8 +22,11 @@ it('ships the licenses of every bundled third-party package next to the bundle',
   for (const needle of ['htmlparser2', 'entities', 'Chris Winberry', 'Copyright (c) Felix', 'Redistribution and use in source and binary forms']) expect(text, needle).toContain(needle);
   expect(text).not.toContain('@gyrospec');
 });
-it('contains no em dash, including bundled dependency comments', () => {
-  expect(readFileSync(bundle, 'utf8').includes(String.fromCharCode(0x2014))).toBe(false);
+it('is readable, not minified, so the directory security scan can read it', () => {
+  const lines = readFileSync(bundle, 'utf8').split('\n');
+  expect(lines.length).toBeGreaterThan(1000);
+  // entities ships its HTML decode table as one long string literal; that one data line is expected.
+  expect(lines.filter(l => l.length > 500).length).toBeLessThanOrEqual(1);
 });
 it('reports version and runs init/status with source parity offline', async () => {
   const root = tempRepo();

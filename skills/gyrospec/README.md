@@ -16,6 +16,14 @@ Run discovery, PRD, prototype (or not applicable), spec, sub-ticket breakdown, p
 
 - [gyro](gyro/SKILL.md): Shared files, formats, script commands, and approval etiquette.
 
+## What it runs and what it touches
+
+- **One local script.** The skills tell the agent to run `node <plugin>/gyro/scripts/gyro.mjs` from your product repository's root. It is readable bundled source: the `gyro` CLI from `packages/cli` in [gyrospec/skills](https://github.com/gyrospec/skills) plus the `htmlparser2` and `entities` packages (licenses in `gyro/scripts/THIRD_PARTY_LICENSES.txt`). It makes no network requests, reads no environment credentials, and sends no data anywhere.
+- **Files.** The script reads and writes only `.gyro/` in the current repository (`config.json`, `ticket.json`, `gates.json`, `approved/` snapshots, `tickets/`, and the artifacts you write with the skills). The phase skills also write the PRD, prototype, spec, discovery log, sub-tickets, and implementation plans (`docs/superpowers/plans/`) in that repository, and the executing skill changes your code as its plan says.
+- **Git and tests.** `gyro-executing-plans` runs `git status`, `git diff`, and your project's own test commands, and opens a pull request only when you ask for one. Commits, pushes, and PRs follow your instructions; invoking a skill does not grant them.
+- **No hooks, no MCP servers, no background processes, no installs.** Nothing runs unless you type a phase skill or the agent follows one.
+- **Needs a shell and Node 20 or later.** It works in agents that can run commands in your repository, such as Claude Code and Codex. In an app without a shell or code execution, the phases cannot run `gyro`.
+
 ## Installation
 
 Gyrospec installs in any agent that reads Agent Skills folders (`SKILL.md`). Install two things: this plugin, and `gyrospec-upstream-skills`, which provides the upstream skills the phases call (`grilling`, `prototype`, `tdd`, `code-review`, `domain-modeling`, `codebase-design`). Both come from the [Gyrospec marketplace](https://github.com/gyrospec/marketplace). Every agent needs Node 20 or later, because the skills run `gyro.mjs` with `node`.
@@ -29,6 +37,8 @@ Gyrospec installs in any agent that reads Agent Skills folders (`SKILL.md`). Ins
 | Any other agent | Copy the skill folders | The Codex copy route is tested |
 
 Pick one route per agent: a plugin install plus a folder copy gives you every skill twice.
+
+If you added Gyrospec from the Claude plugin directory, also add Matt Pocock's skills there (`mattpocock-skills`), which provide the same upstream skills; do not also install `gyrospec-upstream-skills`, or every upstream skill appears twice.
 
 ### Claude Code
 

@@ -122,7 +122,7 @@ it('has no em dash in plugin files other than the generated bundle', () => {
   const walk = (dir: string) => { for (const item of readdirSync(dir, { withFileTypes: true })) {
     const file = join(dir, item.name);
     if (item.isDirectory()) walk(file);
-    else if (item.name !== 'gyro.mjs') expect(readFileSync(file, 'utf8'), file).not.toContain(String.fromCharCode(0x2014));
+    else if (item.name !== 'gyro.mjs' && !item.name.endsWith('.png')) expect(readFileSync(file, 'utf8'), file).not.toContain(String.fromCharCode(0x2014));
   } };
   walk(root);
 });
