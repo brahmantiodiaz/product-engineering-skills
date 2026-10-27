@@ -18,7 +18,19 @@ Run discovery, PRD, prototype (or not applicable), spec, sub-ticket breakdown, p
 
 ## Installation
 
-For Claude Code, add the Gyrospec marketplace and install both plugins. `mattpocock-skills` provides the upstream skills the phases call (`grilling`, `prototype`, `tdd`, `code-review`, `domain-modeling`).
+Gyrospec installs in any agent that reads Agent Skills folders (`SKILL.md`). Install two things: this plugin, and `mattpocock-skills`, which provides the upstream skills the phases call (`grilling`, `prototype`, `tdd`, `code-review`, `domain-modeling`, `codebase-design`). Both come from the [Gyrospec marketplace](https://github.com/gyrospec/marketplace). Every agent needs Node 20 or later, because the skills run `gyro.mjs` with `node`.
+
+| Agent | How | Tested |
+|---|---|---|
+| Claude Code | Gyrospec marketplace | Yes |
+| Codex | Gyrospec marketplace | Yes |
+| GitHub Copilot CLI | Gyrospec marketplace | Not yet |
+| Gemini CLI | `gemini skills install` | Not yet |
+| Any other agent | Copy the skill folders | The Codex copy route is tested |
+
+Pick one route per agent: a plugin install plus a folder copy gives you every skill twice.
+
+### Claude Code
 
 ```text
 /plugin marketplace add gyrospec/marketplace
@@ -26,7 +38,37 @@ For Claude Code, add the Gyrospec marketplace and install both plugins. `mattpoc
 /plugin install mattpocock-skills@gyrospec
 ```
 
-For Codex, copy or symlink each of the eight `skills/gyrospec/<skill>` folders into `~/.agents/skills`, then do the same for these upstream folders, each as its own skill folder:
+Start a new session afterwards. Update with `/plugin marketplace update gyrospec`, then update the plugins from `/plugin`.
+
+### Codex
+
+```bash
+codex plugin marketplace add gyrospec/marketplace
+codex plugin add gyrospec@gyrospec
+codex plugin add mattpocock-skills@gyrospec
+```
+
+Update with `codex plugin marketplace upgrade gyrospec`. On Windows, keep `CODEX_HOME` on a short path; a very long one fails the clone with `Filename too long`.
+
+### GitHub Copilot CLI (not tested yet)
+
+```bash
+copilot plugin marketplace add gyrospec/marketplace
+copilot plugin install gyrospec@gyrospec
+copilot plugin install mattpocock-skills@gyrospec
+```
+
+### Gemini CLI (not tested yet)
+
+```bash
+gemini skills install https://github.com/gyrospec/skills.git --path skills/gyrospec
+gemini skills install https://github.com/gyrospec/skills.git --path skills/engineering
+gemini skills install https://github.com/gyrospec/skills.git --path skills/productivity
+```
+
+### Any other agent: copy the folders
+
+Copy (or symlink) each of the eight `skills/gyrospec/<skill>` folders into the agent's skills directory (for Codex without plugins, `~/.agents/skills`), then these upstream folders, each as its own skill folder:
 
 - `skills/productivity/grilling`
 - `skills/engineering/prototype`
@@ -35,4 +77,6 @@ For Codex, copy or symlink each of the eight `skills/gyrospec/<skill>` folders i
 - `skills/engineering/domain-modeling`
 - `skills/engineering/codebase-design` (called by `tdd`)
 
-Keep each folder whole: its `agents/openai.yaml`, its `NOTICE.md` where present, and, for `gyro`, the `scripts/gyro.mjs` bundle with its `scripts/THIRD_PARTY_LICENSES.txt`. Notices for the plugin are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Run all script commands from the product repository root. Install Node 20+ before beginning discovery.
+Copied folders do not update themselves: copy them again after a release.
+
+Keep each folder whole: its `agents/openai.yaml`, its `NOTICE.md` where present, and, for `gyro`, the `scripts/gyro.mjs` bundle with its `scripts/THIRD_PARTY_LICENSES.txt`. Notices for the plugin are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Run all script commands from the product repository root.
