@@ -1,3 +1,20 @@
+## Gyrospec
+
+This repository is the [Gyrospec](https://github.com/gyrospec) fork of [mattpocock/skills](https://github.com/mattpocock/skills). It adds the **gyrospec** plugin: human-driven product engineering (discovery, PRD, prototype, spec, sub-tickets, and planned execution) with gates you approve, plus an offline `gyro` script. It runs inside your product repository, in Claude Code, Codex, and other agents that read skill folders.
+
+- What it does and how to install it in each agent: [skills/gyrospec/README.md](skills/gyrospec/README.md)
+- Marketplace for Claude Code and Codex: [gyrospec/marketplace](https://github.com/gyrospec/marketplace)
+
+```text
+/plugin marketplace add gyrospec/marketplace
+/plugin install gyrospec@gyrospec
+/plugin install mattpocock-skills@gyrospec
+```
+
+Everything below this section is the upstream README.
+
+---
+
 <p>
   <a href="https://www.aihero.dev/s/skills-newsletter">
     <picture>
