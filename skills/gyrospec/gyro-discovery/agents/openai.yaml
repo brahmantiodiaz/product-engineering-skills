@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gyrospec Discovery"
+  short_description: "Interview and record feature discovery"
+policy:
+  allow_implicit_invocation: false

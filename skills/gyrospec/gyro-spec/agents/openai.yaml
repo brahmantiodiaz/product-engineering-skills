@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gyrospec Spec"
+  short_description: "Design and approve an implementation spec"
+policy:
+  allow_implicit_invocation: false

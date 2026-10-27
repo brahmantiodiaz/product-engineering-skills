@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gyrospec Prototype"
+  short_description: "Review a requirement-linked HTML prototype"
+policy:
+  allow_implicit_invocation: false

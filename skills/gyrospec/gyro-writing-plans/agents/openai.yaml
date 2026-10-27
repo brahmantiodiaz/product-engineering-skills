@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gyrospec Writing Plans"
+  short_description: "Plan a ready sub-ticket with exact TDD tasks"
+policy:
+  allow_implicit_invocation: false

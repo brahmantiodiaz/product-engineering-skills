@@ -1,0 +1,3 @@
+# Generated files are compared byte for byte with a fresh bundle; keep their LF endings on every platform.
+gyro.mjs -text
+THIRD_PARTY_LICENSES.txt -text

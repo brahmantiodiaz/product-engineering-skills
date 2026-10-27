@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gyrospec Executing Plans"
+  short_description: "Execute a current plan and track its progress"
+policy:
+  allow_implicit_invocation: false

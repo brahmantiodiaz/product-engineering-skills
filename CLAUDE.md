@@ -26,6 +26,8 @@ No em-dashes anywhere in this repo's prose (`SKILL.md` files, docs, `README.md`,
 
 ## Agent skills
 
+`skills/gyrospec/` is the Gyrospec plugin. The promoted-bucket, docs-page, and ask-matt rules above apply to Matt's buckets only. Gyrospec skills follow `.agents/invocation.md` and their own `README.md`.
+
 ### Triage labels
 
 Canonical names, unchanged. See `docs/agents/triage-labels.md`. Issues are judged against [`SCOPE.md`](./SCOPE.md).

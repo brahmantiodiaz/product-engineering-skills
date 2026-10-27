@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gyrospec PRD"
+  short_description: "Write a PRD and request human approval"
+policy:
+  allow_implicit_invocation: false

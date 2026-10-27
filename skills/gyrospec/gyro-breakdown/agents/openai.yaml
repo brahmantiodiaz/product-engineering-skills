@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gyrospec Breakdown"
+  short_description: "Slice an approved spec into local sub-tickets"
+policy:
+  allow_implicit_invocation: false
