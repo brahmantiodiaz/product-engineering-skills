@@ -28,7 +28,7 @@ The model-invoked [`gyro`](skills/gyrospec/gyro/SKILL.md) skill is the shared re
 
 ## Installation
 
-Gyrospec installs in any agent that reads Agent Skills folders (`SKILL.md`). Install two plugins from the [Gyrospec marketplace](https://github.com/gyrospec/marketplace): `gyrospec`, and `mattpocock-skills`, which provides the upstream skills the phases call.
+Gyrospec installs in any agent that reads Agent Skills folders (`SKILL.md`). Install two plugins from the [Gyrospec marketplace](https://github.com/gyrospec/marketplace): `gyrospec`, and `gyrospec-upstream-skills`, which provides the upstream skills the phases call.
 
 | Agent | How | Tested |
 |---|---|---|
@@ -45,7 +45,7 @@ Pick one route per agent: a plugin install plus a folder copy gives you every sk
 ```text
 /plugin marketplace add gyrospec/marketplace
 /plugin install gyrospec@gyrospec
-/plugin install mattpocock-skills@gyrospec
+/plugin install gyrospec-upstream-skills@gyrospec
 ```
 
 **Codex**
@@ -53,7 +53,7 @@ Pick one route per agent: a plugin install plus a folder copy gives you every sk
 ```bash
 codex plugin marketplace add gyrospec/marketplace
 codex plugin add gyrospec@gyrospec
-codex plugin add mattpocock-skills@gyrospec
+codex plugin add gyrospec-upstream-skills@gyrospec
 ```
 
 Copilot CLI, Gemini CLI, folder copies, and updates: see [skills/gyrospec/README.md](skills/gyrospec/README.md#installation).

@@ -79,7 +79,7 @@ it('installs from the separate gyrospec marketplace, leaving the fork marketplac
   expect(readme).toContain('/plugin install gyrospec@gyrospec');
   expect(readme).not.toContain('@mattpocock');
   const fork = JSON.parse(readFileSync(join(root, '../../.claude-plugin/marketplace.json'), 'utf8')) as { plugins: { name: string }[] };
-  expect(fork.plugins.map(p => p.name)).toEqual(['mattpocock-skills']);
+  expect(fork.plugins.map(p => p.name)).toEqual(['gyrospec-upstream-skills']);
 });
 it('gives code-review a fixed point, the local spec and plan, and the uncommitted changes', () => {
   const skill = readFileSync(join(root, 'gyro-executing-plans/SKILL.md'), 'utf8');

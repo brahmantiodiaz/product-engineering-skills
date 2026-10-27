@@ -30,6 +30,8 @@ No em-dashes anywhere in this repo's prose (`SKILL.md` files, docs, `README.md`,
 
 The top-level `README.md` is the Gyrospec landing page, kept in step with `skills/gyrospec/README.md` (the copy that ships inside the plugin). Matt's original top-level README lives in `UPSTREAM-README.md`; wherever an upstream rule or `.agents/` file says the top-level `README.md`, read `UPSTREAM-README.md`. When merging `upstream/main`, apply upstream changes to `README.md` into `UPSTREAM-README.md` and keep the Gyrospec `README.md`.
 
+In this fork the root plugin is named `gyrospec-upstream-skills` (the `name` in `.claude-plugin/plugin.json` and in the plugin entry of `.claude-plugin/marketplace.json`); upstream calls it `mattpocock-skills`. Keep the fork's name when an upstream merge conflicts on those lines. The npm package name in `package.json` stays `mattpocock-skills`, because changesets are keyed by it.
+
 ### Triage labels
 
 Canonical names, unchanged. See `docs/agents/triage-labels.md`. Issues are judged against [`SCOPE.md`](./SCOPE.md).

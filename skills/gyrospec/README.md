@@ -18,7 +18,7 @@ Run discovery, PRD, prototype (or not applicable), spec, sub-ticket breakdown, p
 
 ## Installation
 
-Gyrospec installs in any agent that reads Agent Skills folders (`SKILL.md`). Install two things: this plugin, and `mattpocock-skills`, which provides the upstream skills the phases call (`grilling`, `prototype`, `tdd`, `code-review`, `domain-modeling`, `codebase-design`). Both come from the [Gyrospec marketplace](https://github.com/gyrospec/marketplace). Every agent needs Node 20 or later, because the skills run `gyro.mjs` with `node`.
+Gyrospec installs in any agent that reads Agent Skills folders (`SKILL.md`). Install two things: this plugin, and `gyrospec-upstream-skills`, which provides the upstream skills the phases call (`grilling`, `prototype`, `tdd`, `code-review`, `domain-modeling`, `codebase-design`). Both come from the [Gyrospec marketplace](https://github.com/gyrospec/marketplace). Every agent needs Node 20 or later, because the skills run `gyro.mjs` with `node`.
 
 | Agent | How | Tested |
 |---|---|---|
@@ -35,7 +35,7 @@ Pick one route per agent: a plugin install plus a folder copy gives you every sk
 ```text
 /plugin marketplace add gyrospec/marketplace
 /plugin install gyrospec@gyrospec
-/plugin install mattpocock-skills@gyrospec
+/plugin install gyrospec-upstream-skills@gyrospec
 ```
 
 Start a new session afterwards. Update with `/plugin marketplace update gyrospec`, then update the plugins from `/plugin`.
@@ -45,7 +45,7 @@ Start a new session afterwards. Update with `/plugin marketplace update gyrospec
 ```bash
 codex plugin marketplace add gyrospec/marketplace
 codex plugin add gyrospec@gyrospec
-codex plugin add mattpocock-skills@gyrospec
+codex plugin add gyrospec-upstream-skills@gyrospec
 ```
 
 Update with `codex plugin marketplace upgrade gyrospec`. On Windows, keep `CODEX_HOME` on a short path; a very long one fails the clone with `Filename too long`.
@@ -55,7 +55,7 @@ Update with `codex plugin marketplace upgrade gyrospec`. On Windows, keep `CODEX
 ```bash
 copilot plugin marketplace add gyrospec/marketplace
 copilot plugin install gyrospec@gyrospec
-copilot plugin install mattpocock-skills@gyrospec
+copilot plugin install gyrospec-upstream-skills@gyrospec
 ```
 
 ### Gemini CLI (not tested yet)
