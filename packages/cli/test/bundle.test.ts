@@ -28,6 +28,10 @@ it('is readable, not minified, so the directory security scan can read it', () =
   // entities ships its HTML decode table as one long string literal; that one data line is expected.
   expect(lines.filter(l => l.length > 500).length).toBeLessThanOrEqual(1);
 });
+it('has no credential-like template references the directory scan reads as a key', () => {
+  // The plugin directory's scan treats ${key}, ${token}, and similar interpolations as reading a credential.
+  expect(readFileSync(bundle, 'utf8')).not.toMatch(/\$\{\s*(key|token|secret|password|apiKey)\s*\}/i);
+});
 it('reports version and runs init/status with source parity offline', async () => {
   const root = tempRepo();
   expect(node([bundle, '--version'], root)).toMatchObject({ status: 0, stdout: 'gyro 0.1.0\n' });

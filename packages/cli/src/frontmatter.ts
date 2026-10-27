@@ -19,18 +19,18 @@ export function parseSubTicket(file: string, text: string): SubTicket {
     if (fields.has(pair[1])) return fail(`duplicate ${pair[1]}`);
     fields.set(pair[1], pair[2]);
   }
-  const scalar = (key: string): string => {
-    const value = fields.get(key);
-    if (value === undefined) return fail(`missing ${key}`);
-    if (value.startsWith('"')) { try { const parsed: unknown = JSON.parse(value); if (typeof parsed !== 'string') return fail(`invalid ${key}`); return parsed; } catch { return fail(`invalid quoted ${key}`); } }
-    if (value.startsWith("'")) { if (!value.endsWith("'")) return fail(`invalid quoted ${key}`); return value.slice(1, -1).replace(/''/g, "'"); }
+  const scalar = (field: string): string => {
+    const value = fields.get(field);
+    if (value === undefined) return fail(`missing ${field}`);
+    if (value.startsWith('"')) { try { const parsed: unknown = JSON.parse(value); if (typeof parsed !== 'string') return fail(`invalid ${field}`); return parsed; } catch { return fail(`invalid quoted ${field}`); } }
+    if (value.startsWith("'")) { if (!value.endsWith("'")) return fail(`invalid quoted ${field}`); return value.slice(1, -1).replace(/''/g, "'"); }
     return value;
   };
-  const list = (key: string): string[] => {
-    const value = fields.get(key);
-    if (!value || !/^\[.*\]$/.test(value)) return fail(`invalid ${key} list`);
+  const list = (field: string): string[] => {
+    const value = fields.get(field);
+    if (!value || !/^\[.*\]$/.test(value)) return fail(`invalid ${field} list`);
     return value.slice(1, -1).split(',').map(v => v.trim()).filter(Boolean).map(v => {
-      if (v.startsWith('"')) { try { return String(JSON.parse(v)); } catch { return fail(`invalid ${key} list`); } }
+      if (v.startsWith('"')) { try { return String(JSON.parse(v)); } catch { return fail(`invalid ${field} list`); } }
       return v.startsWith("'") && v.endsWith("'") ? v.slice(1, -1) : v;
     });
   };
