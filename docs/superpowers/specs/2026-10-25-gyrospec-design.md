@@ -29,7 +29,7 @@ Plans and tasks are created and executed locally by the agent, using Gyrospec sk
 
 | Area | Decision |
 |---|---|
-| Skills foundation | Fork `mattpocock/skills`; new skills live in their own folder, `skills/gyro/` |
+| Skills foundation | Fork `mattpocock/skills`; new skills live in their own bucket, `skills/gyrospec/`, shipped as a separate plugin `gyrospec` |
 | Platform | Built in-house (Plane is not forked). Plane is a UX reference only; no code is copied |
 | Source of truth | Platform: PRD, prototype, spec, ticket, sub-ticket, approval |
 | Local | Agent-owned plans and tasks. Not synced to the platform |
@@ -69,7 +69,7 @@ The `@gyrospec/format` parser recognizes only these fixed English keywords. A PR
 ```
 1. gyrospec/skills                 fork of mattpocock/skills, public, MIT
    ├── skills/…                    upstream skills (changed as little as possible)
-   ├── skills/gyro/…               Gyrospec skills
+   ├── skills/gyrospec/…           Gyrospec skills (plugin `gyrospec`)
    ├── packages/format/            @gyrospec/format
    ├── packages/cli/               @gyrospec/cli (the `gyro` command)
    └── THIRD_PARTY_NOTICES.md      attribution for mattpocock/skills and Superpowers
@@ -82,7 +82,7 @@ Both repositories belong to the GitHub organization `gyrospec`. Work in the skil
 
 `@gyrospec/format` is published to GitHub Packages under the `gyrospec` organization, and the platform depends on it by that name. Inside the skills repo, the CLI depends on it with `file:../format`. GitHub Packages requires a token even for public packages, so the CLI (M3) is published to the public npm registry instead, under an npm organization `gyrospec` that has not been created yet.
 
-New skills go in `skills/gyro/` and changes to upstream skills are kept minimal, so merges from upstream rarely conflict.
+New skills go in `skills/gyrospec/`, shipped as their own plugin `gyrospec` next to the fork's `mattpocock-skills` plugin, and upstream skills and manifests are not changed, so merges from upstream rarely conflict.
 
 ### 5.2 Components
 
@@ -277,6 +277,8 @@ Post-MVP mitigation: confirm approvals with a passkey (WebAuthn with user verifi
 
 ## 10. Skills
 
+The skills also run without the platform, in **local mode**: artifacts in a `.gyro/` folder in the product repository, gates approved in chat and recorded in a file, and formats checked offline by a bundled `gyro` script. Local mode is specified in `2026-10-27-gyrospec-local-mode-design.md` and is built before the platform-connected skills.
+
 ### 10.1 Principles
 
 - Every phase is a **user-invoked** skill that ends by suggesting the next command, never proceeding on its own. This matches the upstream rule that a user-invoked skill never invokes another user-invoked skill, and it keeps the flow human-driven.
@@ -289,7 +291,7 @@ Post-MVP mitigation: confirm approvals with a passkey (WebAuthn with user verifi
 
 | Skill | Prerequisites | Behavior | Output |
 |---|---|---|---|
-| `/gyro-discovery` | none | Interview using `grilling`, one question per turn. At the start, the user picks a feature size (10.3). Every answer is classified as fact, decision, assumption, or open question. The user confirms criticality. AI recommendations are never treated as decisions | `.gyro/<ticket>/discovery.md` |
+| `/gyro-discovery` | none | Interview in rounds using `grilling` (every question answerable now, numbered, each with a recommended answer). At the start, the user picks a feature size (10.3). Every answer is classified as fact, decision, assumption, or open question. The user confirms criticality. AI recommendations are never treated as decisions | `.gyro/<ticket>/discovery.md` |
 | `/gyro-prd` | Discovery with no `blocker` REQ that is `open`/`conflicted` | Writes the PRD per 7.1, then runs `gyro check` and `gyro push prd`. The ticket is created if it does not exist. Adds no requirement that is not in discovery | PRD draft |
 | `/gyro-prototype` | PRD approved | Adapts the upstream `prototype` skill: one HTML with multiple screens and `data-req`, plus a report of REQs without a screen | Prototype draft |
 | `/gyro-spec` | PRD approved; prototype approved or N/A | Superpowers-style design doc with `Implements:` in each section | Spec draft |
@@ -380,7 +382,7 @@ There are 10 discovery dimensions:
 3. **CLI end-to-end:** against a local platform (docker compose).
 4. **Prototype security:** a prototype cannot read app cookies, fetch, or submit forms.
 5. **Skill behavior evals:** scenario-based, each scenario run several times. Scenarios:
-   - one question per turn;
+   - interviewing in rounds of numbered questions, each with a recommended answer;
    - refusing to write a PRD while an open blocker remains;
    - not inventing rules when the user answers "I don't know";
    - never claiming approval without server confirmation;
@@ -417,8 +419,8 @@ Each milestone gets its own implementation plan.
 | M3 | CLI | `login`, `init`, `check`, `push`, `pull`, `status` |
 | M4 | Gates and approvals | Web approval, CLI ApprovalRequest, gate rules, stale propagation |
 | M5 | Prototype hosting | Object storage, usercontent domain, sandbox, CSP, signed URLs |
-| M6 | Product-phase skills | Fork setup, `gyro-discovery`, `gyro-prd`, `gyro-prototype`, `gyro-spec`, `gyro-breakdown`, tracker option in setup |
-| M7 | Sub-tickets and execution | Sub-tickets with `blocked_by`, `gyro ticket update`, `gyro-writing-plans`, `gyro-executing-plans` |
+| M6 | Skills in local mode | All Gyrospec skills (`gyro`, `gyro-discovery`, `gyro-prd`, `gyro-prototype`, `gyro-spec`, `gyro-breakdown`, `gyro-writing-plans`, `gyro-executing-plans`), the bundled offline `gyro` script (`init`, `check`, `status`, `approve`, `ticket`), and the `gyrospec` plugin, per the local mode spec. Built before M3 to M5 |
+| M7 | Skills on the platform | Platform mode for the skills and the `gyro` script: `push`/`pull` of `.gyro/` content, confirmation-link approvals, sub-ticket status on the platform. Needs M3 to M5 |
 
 ## 16. MVP success criteria
 
